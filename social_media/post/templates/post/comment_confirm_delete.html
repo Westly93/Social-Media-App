@@ -1,0 +1,16 @@
+{% extends 'landing/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class=" p-4 shadow mt-5 border post-delete-wrapper">
+    <h3 class="text-center pt-2 border-bottom">Are you sure you want to delete comment</h3>
+    <p>{{ object.body }}</p>
+    <form method="post"> 
+        {% csrf_token %}
+        <div class="">
+            <button type="submit" class="btn btn-outline-danger">Yes Am sure, Delete</button>
+            <a href="{% url 'post-detail' object.pk %}" class="btn btn-outline-primary">Cancel</a>
+        </div>      
+    </form>
+    
+</div>
+{% endblock content %}

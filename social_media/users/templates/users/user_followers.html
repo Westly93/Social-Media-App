@@ -1,0 +1,22 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+<div class="mt-5">
+    {% for follower in followers %}
+        <div class="article">
+            <img style="width: 60px; height: 60px; float: left; margin-right: 1rem;" src="{{ follower.profile.image.url }}" class="rounded-circle post-img">
+            <h3 style="padding-top: 0.5rem;" class="border-bottom">{{ follower.username }}</h3>
+            <div class="mt-4">
+                {% if follower.profile.bio %}
+                    <p><strong>Bio: </strong>{{ follower.profile.bio }}</p>
+                {% endif %}
+                {% if follower.profile.current_city %}
+                    <p><strong>Current city: </strong>{{ follower.profile.current_city }}</p>
+                {% endif %}
+            </div>
+            
+            
+        </div>
+        
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,10 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+    <div class="text-center">
+        <h1>Welcome to our social media app</h1>
+        <p>Follow and like someone you know and get their latest posts and updates</p>
+        <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+        <a href="{% url 'register' %}" class="btn btn-outline-dark">Register</a>
+    </div>
+    
+{% endblock content %}

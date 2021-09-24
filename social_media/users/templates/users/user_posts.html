@@ -1,0 +1,100 @@
+{% extends 'landing/base.html' %}
+{% block content %}
+    <div class="mt-5">
+        <div class="text-center">
+            <img style="width: 200px; height: 200px; object-fit: cover;" src="{{ user.profile.image.url }}" class="rounded-circle mb-3">
+            <p><a href="{% url 'followers-list' user.username %}">Followers({{ followers_num }})</a></p>
+            {% if is_follower %}
+                {% if user == request.user %}
+                    
+                {% else %}
+                    
+                    <form method="post" action="{% url 'remove-follower' user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Following...</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                {% if user == request.user %}
+
+                {% else %}
+                    
+                    <form method="post" action="{% url 'add-follower' user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Follow</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% for post in posts %}
+            <div class="mt-1 article">
+                <img src="{{ post.author.profile.image.url }}" class=" post-img rounded-circle">
+                <p class="border-bottom post-text"><strong>{{ post.author }}</strong> {{ post.date_posted }}</p>
+                <div class=" post-body mt-4">
+                    <div class="article-img">
+                        {% if post.image.count > 0 %}
+                            {% if post.image.count == 1 %}
+                                <div>
+                                    {% for img in post.image.all %}
+                                        <div style="height: 500px;">
+                                            <img style="width: 100%; height: 100%; object-fit: cover;" src="{{ img.image.url }}" alt="">
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                            <div style="gap: 10px;" class="grid">
+                                {% for img in post.image.all %}
+                                    <div class="post-image">
+                                        <img style="width: 100%;" src="{{ img.image.url }}" alt="">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        
+                        {% endif %}
+                    <p class="post-content ml-3">{{ post.body }}</p>
+                    </div>
+                    <div class="like-wrapper d-flex">
+                        {% if post.author != request.user %}
+                            <form class="m-1" method="post" action="{% url 'post-like' post.id %}">
+                                {% csrf_token %}
+                                <button style="background-color: lightblue;" type="submit" class="btn btn-sm ">Like</button>
+                                <span>{{ post.likes.all.count }}</span>
+                            </form>
+
+                        
+                            <form class="m-1" method="post" action="{% url 'post-dislike' post.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">dislike</button>
+                                <span>{{ post.dislikes.all.count }}</span>
+                            </form>
+                        {% else %}
+                            <a href="" class="btn btn-sm disabled">Likes: {{ post.likes.all.count }}</a>
+                            <a href="" class="btn btn-sm disabled">Dislikes: {{ post.likes.all.count }}</a>
+                        {% endif %}
+                        <a href="{% url 'post-detail' post.pk %}" class="btn btn-sm btn-outline-info m-1">More..</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-2">
+        {% if posts.has_other_pages %}
+            {% if posts.has_previous %}
+                <a href="?page=1" class="btn btn-sm btn-outline-info">First</a>
+                <a href="?page={{posts.previous_page_number}}" class="btn btn-sm btn-outline-info">Previous</a>
+            {% endif %}
+            {% for num in paginator.page_range %}
+                {% if posts.number == num %}
+                    <a href="?page={{num}}" class="btn btn-sm btn-info">{{num}}</a>
+                {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                    <a href="?page={{num}}" class="btn btn-sm btn-outline-info">{{num}}</a>
+                {% endif %}
+            {% endfor %}
+            {% if posts.has_next %}
+                <a href="?page={{ paginator.num_pages }}" class="btn btn-sm btn-outline-info">Last</a>
+                <a href="?page={{posts.next_page_number}}" class="btn btn-sm btn-outline-info">Next</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock content %}

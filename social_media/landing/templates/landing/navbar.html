@@ -1,0 +1,40 @@
+<div class="navbar">
+    <nav class="grid custom-navbar">
+        <div class="left-grid">
+            <ul>
+                <li><a 
+                    {% if user.is_authenticated %}
+                        href="{% url 'posts' %}" 
+                    {% else %}
+                        href="{% url 'index' %}"
+                    {% endif %}>
+                    Social app</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'user-posts' request.user.username %}">Your Posts</a></li>
+                    {% endif %}
+            </ul>
+        </div>
+        <div class="rigth-grid flex">
+            <ul>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
+                    <div class="form-group">
+                        <form class="d-flex" action="{% url 'profile-search' %}" method="GET">
+                            
+                            <input style="width: 150px;" value="{{ request.GET.query }}" class= 'form-control' aria-label="Username" aria-describedby="basic-addon1"  name= 'query' type="text" placeholder="Username..">
+                            <button class= 'btn btn-sm btn-secondary' type="submit">Search</button>
+                        </form>
+                    </div>
+                   
+                    
+                {% else %}
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+                    
+            </ul>
+            
+        </div>
+    </nav>
+</div>

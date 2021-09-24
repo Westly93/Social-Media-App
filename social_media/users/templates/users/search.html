@@ -1,0 +1,28 @@
+{% extends 'landing/base.html' %}
+
+{% block content %}
+<div class="mt-5">
+    {% if is_empty %}
+        <div class="alert alert-info">
+            There is no match for the user profile searched, Can you please try something else!
+        </div>
+    {% else %}
+        {% for profile in profile_list %}
+            <div class="article">
+                <img style="width: 200px; height: 200px;" src="{{ profile.image.url }}" class="rounded-circle profile-img mb-3">
+                <div class="post-wrapper">
+                <a style="font-size: 24px;" href="{% url 'user-posts' profile.user.username %}">@{{ profile.user }}</a>
+                {% if profile.current_city %}
+                    
+                    <p><strong>Current City:</strong> {{profile.current_city }}</p>
+                {% endif %}
+                {% if profile.bio %}
+                    <p><strong>Bio: </strong>{{ profile.bio }}</p>
+                {% endif %}
+                <p>Followers({{ profile.followers.all.count }})</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock content %}
